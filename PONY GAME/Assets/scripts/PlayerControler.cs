@@ -10,6 +10,7 @@ public class PlayerControler : MonoBehaviour
     private float moveInput;
 
     private bool isRun = false;
+    private bool isMagicActive = false;
     private bool isGrounded;
     public Transform feetPos;
     public float checkRadius;
@@ -28,36 +29,41 @@ public class PlayerControler : MonoBehaviour
 
     // Update is called once per frame
     void FixedUpdate()
-    {
-        float spd;
-        moveInput = Input.GetAxis("Horizontal");
-        if (isRun)
-            spd = runSpeed;
-        else spd = speed;
-        rb.velocity = new Vector2(spd * moveInput, rb.velocity.y);
-        if ((facingRight == true && moveInput < 0) || (facingRight == false && moveInput>0))
-        {
-            Flip();
-        }
-
-        if (Input.GetKey(KeyCode.LeftControl))
-        {
-            anim.SetBool("isRunning", true);
-            isRun = true;
-        }
+    {               
+        if (isMagicActive) { }
         else
         {
-            anim.SetBool("isRunning", false);
-            isRun = false;
-        }
+            anim.SetBool("DoMagic", false);
+            float spd;
+            moveInput = Input.GetAxis("Horizontal");
+            if (isRun)
+                spd = runSpeed;
+            else spd = speed;
+            rb.velocity = new Vector2(spd * moveInput, rb.velocity.y);
+            if ((facingRight == true && moveInput < 0) || (facingRight == false && moveInput > 0))
+            {
+                Flip();
+            }
 
-        if (moveInput == 0)
-        {
-            anim.SetBool("isWalk", false);
-        }
-        else
-        {
-            anim.SetBool("isWalk", true);
+            if (Input.GetKey(KeyCode.LeftControl))
+            {
+                anim.SetBool("isRunning", true);
+                isRun = true;
+            }
+            else
+            {
+                anim.SetBool("isRunning", false);
+                isRun = false;
+            }
+
+            if (moveInput == 0)
+            {
+                anim.SetBool("isWalk", false);
+            }
+            else
+            {
+                anim.SetBool("isWalk", true);
+            }
         }
     }
 
@@ -70,18 +76,37 @@ public class PlayerControler : MonoBehaviour
         else if (isRun == true && !Input.GetKeyDown(KeyCode.LeftControl))
             isRun = false;*/
 
-        if (isGrounded == true && (Input.GetKeyDown(KeyCode.W)||Input.GetKeyDown(KeyCode.UpArrow)))
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            rb.velocity = Vector2.up * jumpforce;
-            anim.SetBool("TakeOff", true);
+            if (isMagicActive)
+            {
+                isMagicActive = false;
+                anim.SetBool("DoMagic", false);
+            }
+            else
+            {
+                isMagicActive = true;
+                anim.SetBool("MagicOn", true);
+                anim.SetBool("DoMagic", true);
+            }
         }
-        if (isGrounded == true)
-        {
-            anim.SetBool("isJumping", false);
-        }
+        if (isMagicActive) { }
         else
         {
-            anim.SetBool("isJumping", true);
+            if (isGrounded == true && (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow) 
+                || Input.GetKeyDown(KeyCode.Space)))
+            {
+                rb.velocity = Vector2.up * jumpforce;
+                anim.SetBool("TakeOff", true);
+            }
+            if (isGrounded == true)
+            {
+                anim.SetBool("isJumping", false);
+            }
+            else
+            {
+                anim.SetBool("isJumping", true);
+            }
         }
     }
 
