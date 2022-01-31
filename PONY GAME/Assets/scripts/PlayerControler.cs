@@ -73,6 +73,15 @@ public class PlayerControler : MonoBehaviour
         if (isGrounded == true && (Input.GetKeyDown(KeyCode.W)||Input.GetKeyDown(KeyCode.UpArrow)))
         {
             rb.velocity = Vector2.up * jumpforce;
+            anim.SetBool("TakeOff", true);
+        }
+        if (isGrounded == true)
+        {
+            anim.SetBool("isJumping", false);
+        }
+        else
+        {
+            anim.SetBool("isJumping", true);
         }
     }
 
