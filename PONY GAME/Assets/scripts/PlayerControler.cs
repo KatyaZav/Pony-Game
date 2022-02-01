@@ -11,6 +11,10 @@ public class PlayerControler : MonoBehaviour
 
     private bool isRun = false;
     private bool isMagicActive = false;
+
+    private int JumpsCounts = 0;
+    private int MaxJumpCounts = 1;
+
     private bool isGrounded;
     public Transform feetPos;
     public float checkRadius;
@@ -71,11 +75,6 @@ public class PlayerControler : MonoBehaviour
     {
         isGrounded = Physics2D.OverlapCircle(feetPos.position, checkRadius, whatIsGround);
 
-        /*if (isRun == false && Input.GetKeyDown(KeyCode.LeftControl))
-            isRun = true;
-        else if (isRun == true && !Input.GetKeyDown(KeyCode.LeftControl))
-            isRun = false;*/
-
         if (Input.GetKeyDown(KeyCode.E))
         {
             if (isMagicActive)
@@ -93,14 +92,27 @@ public class PlayerControler : MonoBehaviour
         if (isMagicActive) { }
         else
         {
-            if (isGrounded == true && (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow) 
+            if ((JumpsCounts<MaxJumpCounts) && (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)
                 || Input.GetKeyDown(KeyCode.Space)))
             {
-                rb.velocity = Vector2.up * jumpforce;
-                anim.SetBool("TakeOff", true);
+                if (JumpsCounts == 0)
+                {
+                    JumpsCounts += 1;
+                    rb.velocity = Vector2.up * jumpforce;
+                    anim.SetBool("TakeOff", true);
+                }               
+                if (JumpsCounts == 1)
+                {
+                    JumpsCounts += 1;
+                    anim.SetBool("WingsOn", true);
+                    anim.SetBool("DoubleJumpOn", true);
+                    rb.velocity = Vector2.up * jumpforce;
+                }
             }
-            if (isGrounded == true)
+
+            if (isGrounded)
             {
+                JumpsCounts = 0;
                 anim.SetBool("isJumping", false);
             }
             else
