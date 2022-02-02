@@ -95,23 +95,29 @@ public class PlayerControler : MonoBehaviour
             if ((JumpsCounts<MaxJumpCounts) && (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)
                 || Input.GetKeyDown(KeyCode.Space)))
             {
-                if (JumpsCounts == 0)
-                {
+                //if (JumpsCounts == 0)
+                //{
                     JumpsCounts += 1;
                     rb.velocity = Vector2.up * jumpforce;
+                    anim.SetInteger("CountJump", 1);
                     anim.SetBool("TakeOff", true);
-                }               
-                if (JumpsCounts == 1)
+
+                    anim.SetBool("DoubleJumpOn", true);
+                //}
+                //else
+                if (JumpsCounts == 2)
                 {
-                    JumpsCounts += 1;
+                    //JumpsCounts += 1;
+                    //rb.velocity = Vector2.up * jumpforce;
+                    anim.SetInteger("CountJump", 2);
                     anim.SetBool("WingsOn", true);
                     anim.SetBool("DoubleJumpOn", true);
-                    rb.velocity = Vector2.up * jumpforce;
                 }
             }
 
             if (isGrounded)
             {
+                anim.SetInteger("CountJump", 0);
                 JumpsCounts = 0;
                 anim.SetBool("isJumping", false);
             }
