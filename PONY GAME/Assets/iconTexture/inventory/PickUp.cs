@@ -9,7 +9,23 @@ public class PickUp : MonoBehaviour
 
     private void Start()
     {
-        inventory = GameObject.FindGameObjectsWithTag("Player").GetComponent<Inventory>();
+        inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>();
     }
 
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            for (int i = 0; i < inventory.Slots.Length; i++)
+            {
+                if (inventory.IsFull[i] == false)
+                {
+                    inventory.IsFull[i] = true;
+                    Instantiate(slotButton, inventory.Slots[i].transform);
+                    Destroy(gameObject);
+                    break;
+                }
+            }
+        }
+    }
 }
