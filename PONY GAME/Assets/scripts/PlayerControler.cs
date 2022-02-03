@@ -4,6 +4,14 @@ using UnityEngine;
 
 public class PlayerControler : MonoBehaviour
 {
+    private enum Special
+    {
+        DoubleJump = 1,
+        Soaring = 2,
+        Atack = 3,
+        Telekinez = 4
+    } 
+
     public float speed;
     public float runSpeed;
     public float jumpforce;
@@ -12,8 +20,12 @@ public class PlayerControler : MonoBehaviour
     private bool isRun = false;
     private bool isMagicActive = false;
 
-    private int JumpsCounts = 0;
-    private int MaxJumpCounts = 1;
+    private int JumpsCounts = 2;
+    private int MaxJumpCounts = 2;
+    private bool canJump = true;
+
+    private bool isDoubleJumpActive = true;
+    private bool isSoaring = true;
 
     private bool isGrounded;
     public Transform feetPos;
@@ -33,48 +45,17 @@ public class PlayerControler : MonoBehaviour
 
     // Update is called once per frame
     void FixedUpdate()
-    {               
+    {
         if (isMagicActive) { }
         else
         {
             anim.SetBool("DoMagic", false);
-            float spd;
-            moveInput = Input.GetAxis("Horizontal");
-            if (isRun)
-                spd = runSpeed;
-            else spd = speed;
-            rb.velocity = new Vector2(spd * moveInput, rb.velocity.y);
-            if ((facingRight == true && moveInput < 0) || (facingRight == false && moveInput > 0))
-            {
-                Flip();
-            }
-
-            if (Input.GetKey(KeyCode.LeftControl))
-            {
-                anim.SetBool("isRunning", true);
-                isRun = true;
-            }
-            else
-            {
-                anim.SetBool("isRunning", false);
-                isRun = false;
-            }
-
-            if (moveInput == 0)
-            {
-                anim.SetBool("isWalk", false);
-            }
-            else
-            {
-                anim.SetBool("isWalk", true);
-            }
+            DoMove();               
         }
     }
 
     private void Update()
     {
-        isGrounded = Physics2D.OverlapCircle(feetPos.position, checkRadius, whatIsGround);
-
         if (Input.GetKeyDown(KeyCode.E))
         {
             if (isMagicActive)
@@ -92,39 +73,42 @@ public class PlayerControler : MonoBehaviour
         if (isMagicActive) { }
         else
         {
-            if ((JumpsCounts<MaxJumpCounts) && (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)
-                || Input.GetKeyDown(KeyCode.Space)))
-            {
-                //if (JumpsCounts == 0)
-                //{
-                    JumpsCounts += 1;
-                    rb.velocity = Vector2.up * jumpforce;
-                    anim.SetInteger("CountJump", 1);
-                    anim.SetBool("TakeOff", true);
-
-                    anim.SetBool("DoubleJumpOn", true);
-                //}
-                //else
-                if (JumpsCounts == 2)
-                {
-                    //JumpsCounts += 1;
-                    //rb.velocity = Vector2.up * jumpforce;
-                    anim.SetInteger("CountJump", 2);
-                    anim.SetBool("WingsOn", true);
-                    anim.SetBool("DoubleJumpOn", true);
-                }
-            }
-
+            isGrounded = Physics2D.OverlapCircle(feetPos.position, checkRadius, whatIsGround);
+            
             if (isGrounded)
             {
-                anim.SetInteger("CountJump", 0);
-                JumpsCounts = 0;
-                anim.SetBool("isJumping", false);
+                JumpsCounts = MaxJumpCounts;
+                anim.SetBool("isJumping", false);                
             }
             else
             {
                 anim.SetBool("isJumping", true);
             }
+            if (canJump)
+            {
+                if (JumpsCounts > 0 && (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)
+                    ))//|| Input.GetKeyDown(KeyCode.Space)))
+                {
+                    Jump();
+                }
+            }
+
+            if (isSoaring && Input.GetKey(KeyCode.Space) && !isGrounded)
+            {
+                anim.SetBool("WingsOn", true);
+                anim.SetBool("IsSoaring", true);
+                rb.gravityScale = 1;
+                rb.drag = 5;
+                canJump = false;
+            }
+            else
+            {
+                anim.SetBool("IsSoaring", false);
+                rb.gravityScale = 5;
+                rb.drag = 0;
+                canJump = true;
+            }
+
         }
     }
 
@@ -134,5 +118,47 @@ public class PlayerControler : MonoBehaviour
         Vector3 Scaler = transform.localScale;
         Scaler.x *= -1;
         transform.localScale = Scaler;
+    }
+
+    void Jump()
+    {
+        JumpsCounts--;  
+
+        if (JumpsCounts == MaxJumpCounts-1 && isGrounded)
+        {
+            rb.velocity = Vector2.up * jumpforce;
+            anim.SetBool("TakeOff", true);            
+        }
+        else if (JumpsCounts == 0 && !isGrounded)
+        {
+            rb.velocity = Vector2.up * jumpforce;
+            anim.SetBool("TakeOff", true);
+            anim.SetBool("WingsOn", true);
+            anim.SetBool("DoubleJumpOn", true);
+        }
+
+        if (JumpsCounts > 0 && (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)
+                    ))//|| Input.GetKeyDown(KeyCode.Space)))
+        {
+            Jump();
+        }
+    }
+
+    void DoMove()
+    {
+        float spd;
+        moveInput = Input.GetAxis("Horizontal");
+        if (isRun)
+            spd = runSpeed;
+        else spd = speed;
+        rb.velocity = new Vector2(spd * moveInput, rb.velocity.y);
+        if ((facingRight == true && moveInput < 0) || (facingRight == false && moveInput > 0))
+        {
+            Flip();
+        }
+
+        isRun = Input.GetKey(KeyCode.LeftControl);
+        anim.SetBool("isRunning", isRun);
+        anim.SetBool("isWalk", !(moveInput == 0));
     }
 }

@@ -60,6 +60,9 @@
     <Compile Include="Assets\Damian Gonzalez\dg_simpleCamFollow\Demo\Scripts\simpleFollow_cubeMovement.cs" />
     <Compile Include="Assets\scripts\movingObjects.cs" />
     <Compile Include="Assets\Damian Gonzalez\dg_simpleCamFollow\Scripts\dg_simpleCamFollow.cs" />
+    <Compile Include="Assets\iconTexture\inventory\inventory.cs" />
+    <Compile Include="Assets\iconTexture\inventory\PickUp.cs" />
+    <Compile Include="Assets\iconTexture\inventory\Slot.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Damian Gonzalez\dg_simpleCamFollow\Documentation.txt" />
