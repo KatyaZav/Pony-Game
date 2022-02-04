@@ -6,6 +6,7 @@ public class PickUp : MonoBehaviour
 {
     private Inventory inventory;
     public GameObject slotButton;
+    public int Id;
 
     private void Start()
     {

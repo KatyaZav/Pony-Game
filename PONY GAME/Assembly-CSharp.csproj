@@ -63,7 +63,7 @@
     <Compile Include="Assets\iconTexture\inventory\Inventory.cs" />
     <Compile Include="Assets\iconTexture\inventory\PickUp.cs" />
     <Compile Include="Assets\Damian Gonzalez\dg_simpleCamFollow\Scripts\dg_simpleCamFollow.cs" />
-    <Compile Include="Assets\iconTexture\inventory\spawn.cs" />
+    <Compile Include="Assets\iconTexture\inventory\MainSpeciality.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Damian Gonzalez\dg_simpleCamFollow\Documentation.txt" />
