@@ -6,21 +6,21 @@ public class MainSpeciality : MonoBehaviour
 {
     /*public int MainSpecialityId;
     public bool isMainSpeciality;
-    //public GameObject slotButton;
+    
+    public GameObject slotButton;
     public GameObject mainSlotButton;
     void Start()
     {
         isMainSpeciality = false;
     }
 
-    public void MakeActive()
+    public void MakeMainSpeciality()
     {
-        var slotButton = GameObject;
         if (isMainSpeciality == false)
         {
             Instantiate(slotButton, mainSlotButton.transform);
             isMainSpeciality = true;
-            MainSpecialityId =  
+            MainSpecialityId = SlotNumber;
         }
         else
         {
@@ -29,7 +29,7 @@ public class MainSpeciality : MonoBehaviour
                 GameObject.Destroy(child.gameObject);
             }
             Instantiate(slotButton, mainSlotButton.transform);
-            MainSpecialityId = 
+            MainSpecialityId = SlotNumber; 
         }
     }*/
 }

@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class NewBehaviourScript : MonoBehaviour
 {
-    // Start is called before the first frame update
+    /*public int SlotNumber;
+    public 
     void Start()
     {
         
@@ -14,5 +15,5 @@ public class NewBehaviourScript : MonoBehaviour
     void Update()
     {
         
-    }
+    }*/
 }

@@ -8,6 +8,10 @@ public class PickUp : MonoBehaviour
     public GameObject slotButton;
     public int Id;
 
+    public bool[] GetBoolInventory()
+    {
+        return inventory.IsFull;
+    }
     private void Start()
     {
         inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>();
@@ -17,6 +21,10 @@ public class PickUp : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+           /*Instantiate(slotButton, inventory.Slots[Id-1].transform);
+           Destroy(gameObject);
+           */
+
             for (int i = 0; i < inventory.Slots.Length; i++)
             {
                 if (inventory.IsFull[i] == false)
